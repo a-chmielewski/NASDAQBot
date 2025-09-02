@@ -51,7 +51,7 @@ class TestAlpacaAPI:
         mock_account.buying_power = "200000.00"
         mock_account.cash = "50000.25"
         mock_account.portfolio_value = "100000.50"
-        mock_account.day_trade_count = 2
+        mock_account.daytrade_count = 2
         mock_account.pattern_day_trader = False
         
         alpaca_api.api.get_account.return_value = mock_account

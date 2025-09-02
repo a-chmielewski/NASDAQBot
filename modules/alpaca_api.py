@@ -226,8 +226,8 @@ class AlpacaAPI:
                 'buying_power': float(account.buying_power),
                 'cash': float(account.cash),
                 'portfolio_value': float(account.portfolio_value),
-                'day_trade_count': int(account.day_trade_count),
-                'pattern_day_trader': account.pattern_day_trader
+                'day_trade_count': int(getattr(account, 'daytrade_count', 0)),
+                'pattern_day_trader': getattr(account, 'pattern_day_trader', False)
             }
             
             self.logger.info(f"Account info retrieved - Equity: ${account_info['equity']:.2f}, "

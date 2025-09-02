@@ -151,19 +151,19 @@ class NASDAQBreakoutBot:
             raise
     
     def wait_for_market_open_plus_15(self) -> datetime:
-        """Wait until 15 minutes after market open."""
+        """Wait until 15 minutes after market open or return immediately if already past."""
         now = datetime.now(self.market_tz)
         
-        # Calculate market open time (9:30 AM ET)
+        # Calculate market open time (9:30 AM ET) for today
         market_open = now.replace(hour=9, minute=30, second=0, microsecond=0)
-        
-        # If it's past market open today, use tomorrow
-        if now > market_open:
-            market_open += timedelta(days=1)
-        
-        # Wait until 15 minutes after market open
         target_time = market_open + timedelta(minutes=15)
         
+        # If we're already past the opening range completion time, proceed immediately
+        if now >= target_time:
+            self.logger.info(f"Already past opening range completion time ({target_time}). Proceeding immediately.")
+            return target_time
+        
+        # If it's before market open today, wait until opening range completes
         if now < target_time:
             wait_seconds = (target_time - now).total_seconds()
             self.logger.info(f"Waiting {wait_seconds:.0f} seconds until opening range completes at {target_time}")
